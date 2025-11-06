@@ -14,11 +14,11 @@ export default function Footer() {
               <PiYoutubeLogo className={'w-6 h-6'} />
               <span>Kênh Youtube</span>
             </Link>
-            <Link href={'#youtube'} className={'flex items-center text-gray-700 gap-3'}>
+            <Link href={'#phone'} className={'flex items-center text-gray-700 gap-3'}>
               <PiPhone className={'w-6 h-6'} />
               <span> 0962920948 </span>
             </Link>
-            <Link href={'#youtube'} className={'flex items-center text-gray-700 gap-3'}>
+            <Link href={'#email'} className={'flex items-center text-gray-700 gap-3'}>
               <IoMailOutline className={'w-6 h-6'} />
               <span>hoanganhan04@gmail.com</span>
             </Link>
