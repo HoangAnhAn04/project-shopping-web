@@ -31,7 +31,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} suppressHydrationWarning={true}>
         <div className="flex min-h-screen flex-col justify-between">
           <Header />
-          <main>{children}</main>
+          <main className={'mt-12'}>{children}</main>
           <Footer />
         </div>
       </body>
