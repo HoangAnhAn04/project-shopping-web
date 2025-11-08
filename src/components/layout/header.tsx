@@ -5,16 +5,16 @@ import HeaderShoppingCart from './header-shopping-cart';
 export default function Header() {
   return (
     <header className={'fixed w-full top-0 z-50 bg-white shadow-md'}>
-      <div className="container flex items-center justify-between h-16 px-4 mx-auto">
+      <div className="container flex items-center justify-between h-20 px-4 mx-auto">
         <Link href={'/'} className={'text-red-800 text-4xl italic font-bold'}>
           Shopping Web
         </Link>
-        <div className={'flex gap-12'}>
+        <div className={'flex gap-24'}>
           <Link href={'/'}>Trang chủ</Link>
-          <Link href={'/products'} className="ml-4">
+          <Link href={'/products'} className={'ml-auto'}>
             Sản phẩm
           </Link>
-          <Link href={'/about'} className="ml-4">
+          <Link href={'/about'} className={'ml-auto'}>
             Giới thiệu
           </Link>
         </div>
