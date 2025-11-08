@@ -5,7 +5,7 @@ import HeaderShoppingCart from './header-shopping-cart';
 export default function Header() {
   return (
     <header className={'fixed w-full top-0 z-50 bg-white shadow-md'}>
-      <div className="container flex items-center justify-between h-20 px-4 mx-auto">
+      <div className="container flex items-center justify-between h-20 px-6 lg:px-8 mx-auto">
         <Link href={'/'} className={'text-red-800 text-4xl italic font-bold'}>
           Shopping Web
         </Link>

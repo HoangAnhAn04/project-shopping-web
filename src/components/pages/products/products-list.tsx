@@ -3,6 +3,7 @@ import { Fragment } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import isValidArray from '@/utils/isValidArray';
+import { getProductPrice } from '@/utils/product_utils';
 
 export default function ProductsList(props: { data: any }) {
   const data = JSON.parse(props.data);
@@ -12,7 +13,8 @@ export default function ProductsList(props: { data: any }) {
         <Fragment key={index}>
           <Link href={`/products/${product.id}`}>
             <ProductImage product={product} />
-            <p>{product.fields.name}</p>
+            <p className="line-clamp-2">{product.fields.name}</p>
+            <p className="font-bold">{getProductPrice(product.fields).toLocaleString('vi-VN')}</p>
           </Link>
         </Fragment>
       ))}
@@ -21,17 +23,18 @@ export default function ProductsList(props: { data: any }) {
 }
 
 const ProductImage = ({ product }: { product: any }) => {
-  if (!isValidArray(product.fields?.image)) {
+  if (!isValidArray(product.fields?.images)) {
     return <>No image available</>;
   }
 
   return (
     <>
       <Image
-        src={product.fields.image[0].url}
+        className={'aspect-square w-full'}
+        src={product.fields.images[0].url}
         alt={product.fields.name}
-        width={product.fields.image[0].width}
-        height={product.fields.image[0].height}
+        width={product.fields.images[0].width}
+        height={product.fields.images[0].height}
       />
     </>
   );
