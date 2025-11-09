@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Fragment } from 'react/jsx-runtime';
 import { resolveRichText } from '@/utils/product_utils';
 import { marked } from 'marked';
+import ProductVariantSelection from '@/components/pages/products/product-variant-selection';
 
 // Configure marked
 marked.setOptions({
@@ -41,7 +42,7 @@ export default async function SingleProduct({ params }: { params: Promise<{ prod
         </div>
         <div className="grow">
           <h1 className="my-4 text-4xl">{String(product.fields.name)}</h1>
-
+          <ProductVariantSelection product={JSON.stringify(product)} />
           <div className="my-8 whitespace-pre-wrap">
             <div
               dangerouslySetInnerHTML={{ __html: marked.parse(resolveRichText(product.fields.description)) as string }}
