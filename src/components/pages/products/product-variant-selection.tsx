@@ -6,8 +6,11 @@ import Image from 'next/image';
 import { PiCheckCircle, PiCheckCircleFill } from 'react-icons/pi';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
+import { useCartStore } from '@/state/cart-store';
 
 export default function ProductVariantSelection(props: { product: any }) {
+  const CartStore = useCartStore();
   const product = JSON.parse(props.product);
   const variants: any = getProductVariants(product.fields);
 
@@ -62,7 +65,26 @@ export default function ProductVariantSelection(props: { product: any }) {
           ))}
         </div>
       </div>
-      <Button size={'lg'} className={'w-full text-lg'}>
+      <Button
+        size={'lg'}
+        className={'w-full text-lg'}
+        onClick={() => {
+          CartStore.add({
+            product: {
+              name: product.fields.name,
+              record_id: product.fields.record_id,
+            },
+            product_variant: variants.find((v: any) => v.variants === selectedId),
+            variant_id: selectedId,
+            quantity: 1,
+          });
+          toast.success('🛒 Thêm vào giỏ hàng thành công', {
+            description: `${product.fields.name} - ${
+              variants.find((v: any) => v.variants === selectedId)?.variant_name
+            }`,
+          });
+        }}
+      >
         Thêm vào giỏ hàng
       </Button>
     </>

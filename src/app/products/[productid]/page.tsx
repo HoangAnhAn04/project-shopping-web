@@ -30,20 +30,20 @@ export default async function SingleProduct({ params }: { params: Promise<{ prod
   const product = data[0];
 
   return (
-    <div className="container my-6">
-      <div className="flex gap-6">
-        <div className="shrink-0">
+    <div className="container mx-auto my-8 px-4">
+      <div className="flex gap-8">
+        <div className="w-32 shrink-0">
           <div className="sticky top-24">
             <ProductImageThumbnail product={product} />
           </div>
         </div>
-        <div className="w-1/2 shrink-0">
+        <div className="flex-1 max-w-xl">
           <ProductImages product={product} />
         </div>
-        <div className="grow">
-          <h1 className="my-4 text-4xl">{String(product.fields.name)}</h1>
+        <div className="flex-1">
+          <h1 className="text-4xl font-bold mb-6">{String(product.fields.name)}</h1>
           <ProductVariantSelection product={JSON.stringify(product)} />
-          <div className="my-8 whitespace-pre-wrap">
+          <div className="mt-8 whitespace-pre-wrap">
             <div
               dangerouslySetInnerHTML={{ __html: marked.parse(resolveRichText(product.fields.description)) as string }}
             ></div>
