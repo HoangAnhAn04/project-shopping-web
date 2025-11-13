@@ -22,6 +22,11 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import base from '@/utils/airtable';
+import isValidArray from '@/utils/isValidArray';
+import { useCartStore } from '@/state/cart-store';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 const checkoutFormSchema = z.object({
   name: z.string().min(2, {
@@ -43,19 +48,55 @@ export default function DialogCheckout(props: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
+  const cartStore = useCartStore();
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof checkoutFormSchema>>({
     resolver: zodResolver(checkoutFormSchema),
-    defaultValues: {
-      name: '',
-      email: '',
-      phone: '',
-      address: '',
-    },
   });
-
   const [loading, setLoading] = React.useState(false);
+
   async function onSubmit(values: z.infer<typeof checkoutFormSchema>) {
-    console.log({ values });
+    setLoading(true);
+
+    try {
+      const request = await base('orders').create([
+        {
+          fields: {
+            name: values.name,
+            phone: values.phone,
+            email: values.email,
+            address: values.address,
+          },
+        },
+      ]);
+      if (isValidArray(request)) {
+        const orderId = request[0].id;
+
+        const records = cartStore.list.map((item) => {
+          return {
+            fields: {
+              price: item.product_variant.variant_price,
+              quantity: item.quantity,
+              productVariant: [item.variant_id],
+              order: [orderId],
+            },
+          };
+        });
+
+        const orderItem = await base('oders-products').create(records);
+
+        if (isValidArray(orderItem)) {
+          toast.success('Tạo đơn hàng thành công!');
+        }
+      } else {
+        new Error('Đã có lỗi xảy ra, tạo đơn không thành công');
+      }
+    } catch (a) {
+      console.log(a);
+    }
+
+    setLoading(false);
   }
 
   return (

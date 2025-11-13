@@ -47,7 +47,7 @@ export default function CartList() {
               <TableRow>
                 <TableHead>Sản phẩm</TableHead>
                 <TableHead className="w-[250px]">Số lượng</TableHead>
-                <TableHead className="text-right">Giá</TableHead>
+                <TableHead className="text-right w-[150px]">Giá</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -113,7 +113,7 @@ export default function CartList() {
                       </Button>
                     </div>
                   </TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="text-right whitespace-nowrap">
                     {(item.product_variant.variant_price * item.quantity).toLocaleString('vi-VN')}₫
                   </TableCell>
                 </TableRow>
