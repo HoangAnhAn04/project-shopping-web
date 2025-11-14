@@ -53,6 +53,12 @@ export default function DialogCheckout(props: {
 
   const form = useForm<z.infer<typeof checkoutFormSchema>>({
     resolver: zodResolver(checkoutFormSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      phone: '',
+      address: '',
+    },
   });
   const [loading, setLoading] = React.useState(false);
 
@@ -78,17 +84,20 @@ export default function DialogCheckout(props: {
             fields: {
               price: item.product_variant.variant_price,
               quantity: item.quantity,
-              productVariant: [item.variant_id],
-              order: [orderId],
+              product_variant: [item.variant_id],
+              orders: [orderId],
             },
           };
         });
 
-        const orderItem = await base('oders-products').create(records);
+        const orderItem = await base('orders-products').create(records);
 
         if (isValidArray(orderItem)) {
           toast.success('Tạo đơn hàng thành công!');
         }
+        cartStore.addSuccessList();
+        cartStore.reset();
+        router.push('/cart/order-success');
       } else {
         new Error('Đã có lỗi xảy ra, tạo đơn không thành công');
       }

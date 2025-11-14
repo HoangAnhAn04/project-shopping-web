@@ -34,7 +34,9 @@ export const useCartStore = create<State & Actions>()(
       setupTime: 0,
       add: (props) => {
         const curState = getState();
-        const foundItemIndex = curState.list.findIndex((item) => item.variant_id === props.variant_id);
+        const foundItemIndex = curState.list.findIndex(
+          (item) => item.variant_id === props.variant_id
+        );
         if (foundItemIndex >= 0) {
           curState.increaseQuantity({
             ...props,
@@ -51,7 +53,9 @@ export const useCartStore = create<State & Actions>()(
       },
       increaseQuantity: (props) => {
         const curState = getState();
-        const foundItemIndex = curState.list.findIndex((item) => item.variant_id === props.variant_id);
+        const foundItemIndex = curState.list.findIndex(
+          (item) => item.variant_id === props.variant_id
+        );
 
         set((state) => {
           state.list[foundItemIndex].quantity += props.quantity;
@@ -59,7 +63,9 @@ export const useCartStore = create<State & Actions>()(
       },
       updateQuantity: (props) => {
         const curState = getState();
-        const foundItemIndex = curState.list.findIndex((item) => item.variant_id === props.variant_id);
+        const foundItemIndex = curState.list.findIndex(
+          (item) => item.variant_id === props.variant_id
+        );
 
         set((state) => {
           state.list[foundItemIndex].quantity = props.quantity;
@@ -67,7 +73,9 @@ export const useCartStore = create<State & Actions>()(
       },
       deleteCartItem: (props) => {
         const curState = getState();
-        const foundItemIndex = curState.list.findIndex((item) => item.variant_id === props.variant_id);
+        const foundItemIndex = curState.list.findIndex(
+          (item) => item.variant_id === props.variant_id
+        );
 
         set((state) => {
           state.list.splice(foundItemIndex, 1);
@@ -90,6 +98,6 @@ export const useCartStore = create<State & Actions>()(
         list: state.list,
         setupTime: state.setupTime,
       }),
-    },
-  ),
+    }
+  )
 );
