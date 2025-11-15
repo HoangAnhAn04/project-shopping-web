@@ -2,11 +2,14 @@ import CartList from '@/components/pages/cart/cart-list';
 
 export default function Cart() {
   return (
-    <>
-      <div className="container my-14">
-        <h1 className="text-5xl font-medium mb-8">Giỏ hàng</h1>
+    <div className="min-h-screen bg-linear-to-b from-gray-50 to-white">
+      <div className="container px-4 mx-auto py-8 md:py-12">
+        <div className="mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900">Giỏ hàng</h1>
+          <p className="text-gray-600 mt-2">Quản lý sản phẩm của bạn</p>
+        </div>
         <CartList />
       </div>
-    </>
+    </div>
   );
 }

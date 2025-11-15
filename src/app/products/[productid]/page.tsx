@@ -14,7 +14,11 @@ marked.setOptions({
   gfm: true,
 });
 
-export default async function SingleProduct({ params }: { params: Promise<{ productId: string }> }) {
+export default async function SingleProduct({
+  params,
+}: {
+  params: Promise<{ productId: string }>;
+}) {
   const { productId } = await params;
 
   const data = await base('products')
@@ -30,23 +34,41 @@ export default async function SingleProduct({ params }: { params: Promise<{ prod
   const product = data[0];
 
   return (
-    <div className="container mx-auto my-8 px-4">
-      <div className="flex gap-8">
-        <div className="w-32 shrink-0">
-          <div className="sticky top-24">
-            <ProductImageThumbnail product={product} />
+    <div className="min-h-screen bg-linear-to-b from-gray-50 to-white">
+      <div className="container px-4 mx-auto py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+          {/* Thumbnails */}
+          <div className="hidden lg:block lg:col-span-1">
+            <div className="sticky top-24">
+              <ProductImageThumbnail product={product} />
+            </div>
           </div>
-        </div>
-        <div className="flex-1 max-w-xl">
-          <ProductImages product={product} />
-        </div>
-        <div className="flex-1">
-          <h1 className="text-4xl font-bold mb-6">{String(product.fields.name)}</h1>
-          <ProductVariantSelection product={JSON.stringify(product)} />
-          <div className="mt-8 whitespace-pre-wrap">
-            <div
-              dangerouslySetInnerHTML={{ __html: marked.parse(resolveRichText(product.fields.description)) as string }}
-            ></div>
+
+          {/* Main Image */}
+          <div className="lg:col-span-6">
+            <ProductImages product={product} />
+          </div>
+
+          {/* Product Info */}
+          <div className="lg:col-span-5">
+            <div className="sticky top-24">
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
+                {String(product.fields.name)}
+              </h1>
+              <ProductVariantSelection product={JSON.stringify(product)} />
+
+              {/* Description */}
+              <div className="mt-8 pt-8 border-t border-gray-200">
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Mô tả sản phẩm</h2>
+                <div className="text-gray-600 whitespace-pre-wrap leading-relaxed">
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: marked.parse(resolveRichText(product.fields.description)) as string,
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -55,12 +77,22 @@ export default async function SingleProduct({ params }: { params: Promise<{ prod
 }
 
 const ProductImageThumbnail = ({ product }: { product: any }) => {
-  if (!isValidArray(product.fields.images)) return <>No Images Available</>;
+  if (!isValidArray(product.fields.images)) return null;
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-3">
       {product.fields.images.map((image: any, index: number) => (
-        <Link href={`#${image.id}`} key={image.id}>
-          <Image src={image.url} alt={product.fields.name} width={150} height={150} />
+        <Link
+          href={`#${image.id}`}
+          key={image.id}
+          className="block rounded-lg overflow-hidden border-2 border-gray-200 hover:border-gray-400 transition-colors"
+        >
+          <Image
+            src={image.url}
+            alt={product.fields.name}
+            width={80}
+            height={80}
+            className="w-full aspect-square object-cover"
+          />
         </Link>
       ))}
     </div>
@@ -68,11 +100,20 @@ const ProductImageThumbnail = ({ product }: { product: any }) => {
 };
 
 const ProductImages = ({ product }: { product: any }) => {
-  if (!isValidArray(product.fields.images)) return <>No Images Available</>;
+  if (!isValidArray(product.fields.images)) {
+    return (
+      <div className="bg-gray-100 rounded-xl aspect-square flex items-center justify-center">
+        <span className="text-gray-400">Không có hình ảnh</span>
+      </div>
+    );
+  }
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-4">
       {product.fields.images.map((image: any, index: number) => (
-        <Fragment key={image.id}>
+        <div
+          key={image.id}
+          className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
+        >
           <Image
             className="w-full"
             src={image.url}
@@ -81,7 +122,7 @@ const ProductImages = ({ product }: { product: any }) => {
             height={image.height}
             id={image.id}
           />
-        </Fragment>
+        </div>
       ))}
     </div>
   );

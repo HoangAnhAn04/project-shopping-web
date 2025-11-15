@@ -1,3 +1,6 @@
+'use client'; // Component này có click (DropdownMenuTrigger) nên phải là 'use client'
+
+import Link from 'next/link';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import {
   DropdownMenu,
@@ -7,40 +10,34 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-export default function HeaderDropdownMenu() {
+
+// 1. Định nghĩa kiểu 'Category' để TypeScript hiểu dữ liệu
+interface Category {
+  id: string;
+  name: string;
+  slug: string; // 'slug' mà bạn đã tạo trong Airtable
+}
+
+export default function HeaderDropdownMenu({ categories }: { categories: Category[] }) {
   return (
-    <>
-      <DropdownMenu>
-        <DropdownMenuTrigger>
-          <RxHamburgerMenu className={'w-8 h-8 cursor-pointer'} />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className={'-translate-x-22'}>
-          <div className={'lg:hidden'}>
-            <DropdownMenuLabel>SẢN PHẨM</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-          </div>
+    <DropdownMenu modal={false}>
+      <DropdownMenuTrigger className="p-2 hover:bg-gray-100 rounded-lg transition-colors group outline-none">
+        <RxHamburgerMenu className="w-6 h-6 md:w-7 md:h-7 text-gray-700 group-hover:text-gray-900 transition-colors" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuLabel className="text-xs font-semibold text-gray-500">
+          DANH MỤC
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
 
-          <DropdownMenuLabel>BỘ SƯU TẬP</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>Áo chống đạn</DropdownMenuItem>
-          <DropdownMenuItem>Giày chiến đấu</DropdownMenuItem>
-          <DropdownMenuItem>Găng tay bảo hộ</DropdownMenuItem>
-          <DropdownMenuItem>Thắt lưng chiến thuật</DropdownMenuItem>
-
-          <DropdownMenuSeparator />
-          <DropdownMenuLabel>PHỤ KIỆN</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>các sản phẩm khác</DropdownMenuItem>
-          <DropdownMenuItem>mũ bảo hiểm</DropdownMenuItem>
-          <DropdownMenuItem>kính bảo hộ</DropdownMenuItem>
-          <DropdownMenuItem>tai nghe chống ồn</DropdownMenuItem>
-
-          <DropdownMenuSeparator />
-          <DropdownMenuLabel>PHỤ KIỆN CUSTOM LIMITED</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>custom phiên bản giới hạn</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </>
+        {categories.map((category) => (
+          <DropdownMenuItem key={category.id} asChild>
+            <Link href={`/category/${category.slug}`} className="cursor-pointer">
+              {category.name}
+            </Link>
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

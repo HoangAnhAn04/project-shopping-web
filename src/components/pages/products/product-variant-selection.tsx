@@ -1,9 +1,9 @@
 'use client';
 
 import { getProductPrice, getProductVariants } from '@/utils/product_utils';
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
-import { PiCheckCircle, PiCheckCircleFill } from 'react-icons/pi';
+import { PiCheckCircleFill } from 'react-icons/pi';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
@@ -18,25 +18,31 @@ export default function ProductVariantSelection(props: { product: any }) {
   const [selectedId, setSelectedId] = useState(variants[0].variants);
 
   return (
-    <>
-      <div className="my-4 py-3 text-xl border-t border-b border-dashed border-gray-900">
-        Giá: {price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+    <div className="space-y-6">
+      {/* Price */}
+      <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+        <div className="text-sm text-gray-600 mb-1">Giá bán</div>
+        <div className="text-3xl font-bold text-gray-900">{price.toLocaleString('vi-VN')}₫</div>
       </div>
 
-      <div className="my-4 flex flex-col gap-4">
-        <p>Phân loại: </p>
-        <div className="grid grid-cols-3 gap-4">
-          {variants.map((variant: any, index: number) => (
-            <Fragment key={variant.variants}>
+      {/* Variants */}
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Phân loại</h3>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {variants.map((variant: any) => {
+            const isSelected = selectedId === variant.variants;
+            const inStock = Number(variant.variant_inhouse) > 0;
+
+            return (
               <div
+                key={variant.variants}
                 className={cn(
-                  'relative transition-all duration-200',
-                  Number(variant.variant_inhouse) > 0
-                    ? 'cursor-pointer hover:scale-105'
-                    : 'opacity-80 cursor-not-allowed',
+                  'group relative bg-white rounded-lg overflow-hidden border transition-all duration-200',
+                  inStock ? 'cursor-pointer hover:shadow-sm' : 'opacity-50 cursor-not-allowed',
+                  isSelected ? 'border-gray-900 shadow-sm' : 'border-gray-200 hover:border-gray-300'
                 )}
                 onClick={() => {
-                  if (Number(variant.variant_inhouse) > 0) {
+                  if (inStock) {
                     setPrice(Number(variant.variant_price));
                     setSelectedId(variant.variants);
                   }
@@ -44,30 +50,39 @@ export default function ProductVariantSelection(props: { product: any }) {
               >
                 {variant.variant_image?.url ? (
                   <Image
-                    className="w-full aspect-square bg-gray-200 "
+                    className="w-full aspect-square object-cover bg-gray-100 group-hover:scale-105 transition-transform duration-300"
                     src={variant.variant_image.url}
                     alt={variant.variant_name}
                     width={150}
                     height={150}
                   />
                 ) : (
-                  <div className="w-full aspect-square bg-gray-200" />
+                  <div className="w-full aspect-square bg-gray-100" />
                 )}
-                <div className="absolute w-full bottom-0 left-0 p-1 bg-gray-700 text-white text-xs flex justify-between">
-                  <div title={variant.variant_name}>
-                    <p className="line-clamp-1">{variant.variant_name}</p>
-                    <p className="line-clamp-1">Kho: {variant.variant_inhouse}</p>
-                  </div>
-                  <div>{Boolean(selectedId === variant.variants) && <PiCheckCircleFill className="w-6 h-6" />}</div>
+                <div className="p-3">
+                  <p
+                    className="text-sm font-medium text-gray-900 line-clamp-1"
+                    title={variant.variant_name}
+                  >
+                    {variant.variant_name}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">Kho: {variant.variant_inhouse}</p>
                 </div>
+                {isSelected && (
+                  <div className="absolute top-2 right-2">
+                    <PiCheckCircleFill className="w-6 h-6 text-gray-900 bg-white rounded-full" />
+                  </div>
+                )}
               </div>
-            </Fragment>
-          ))}
+            );
+          })}
         </div>
       </div>
+
+      {/* Add to Cart Button */}
       <Button
-        size={'lg'}
-        className={'w-full text-lg'}
+        size="lg"
+        className="w-full text-lg font-semibold"
         onClick={() => {
           CartStore.add({
             product: {
@@ -87,6 +102,6 @@ export default function ProductVariantSelection(props: { product: any }) {
       >
         Thêm vào giỏ hàng
       </Button>
-    </>
+    </div>
   );
 }

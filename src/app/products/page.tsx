@@ -12,9 +12,14 @@ export default async function ProductPage() {
   }
 
   return (
-    <div className={'container mx-auto px-6 lg:px-8 mt-24 mb-14'}>
-      <h1 className={'text-3xl lg:text-4xl font-bold mb-10'}>Tất cả sản phẩm</h1>
-      <ProductsList data={JSON.stringify(data)} />
+    <div className="min-h-screen bg-linear-to-b from-gray-50 to-white">
+      <div className="container px-4 mx-auto py-8 md:py-12">
+        <div className="mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900">Tất cả sản phẩm</h1>
+          <p className="text-gray-600 mt-2">Khám phá bộ sưu tập sản phẩm của chúng tôi</p>
+        </div>
+        <ProductsList data={JSON.stringify(data)} />
+      </div>
     </div>
   );
 }
