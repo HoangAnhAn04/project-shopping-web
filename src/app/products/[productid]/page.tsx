@@ -1,12 +1,10 @@
 import base from '@/utils/airtable';
 import isValidArray from '@/utils/isValidArray';
 import { notFound } from 'next/navigation';
-import Link from 'next/link';
-import Image from 'next/image';
-import { Fragment } from 'react/jsx-runtime';
 import { resolveRichText } from '@/utils/product_utils';
 import { marked } from 'marked';
 import ProductVariantSelection from '@/components/pages/products/product-variant-selection';
+import ProductImageGallery from '@/components/pages/products/product-image-gallery';
 
 // Configure marked
 marked.setOptions({
@@ -33,20 +31,19 @@ export default async function SingleProduct({
 
   const product = data[0];
 
+  // Extract only the plain data for client components
+  const productData = {
+    name: product.fields.name,
+    images: Array.isArray(product.fields.images) ? product.fields.images : [],
+  };
+
   return (
     <div className="min-h-screen bg-linear-to-b from-gray-50 to-white">
       <div className="container px-4 mx-auto py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
-          {/* Thumbnails */}
-          <div className="hidden lg:block lg:col-span-1">
-            <div className="sticky top-24">
-              <ProductImageThumbnail product={product} />
-            </div>
-          </div>
-
-          {/* Main Image */}
-          <div className="lg:col-span-6">
-            <ProductImages product={product} />
+          {/* Image Gallery */}
+          <div className="lg:col-span-7">
+            <ProductImageGallery productData={productData} />
           </div>
 
           {/* Product Info */}
@@ -75,55 +72,3 @@ export default async function SingleProduct({
     </div>
   );
 }
-
-const ProductImageThumbnail = ({ product }: { product: any }) => {
-  if (!isValidArray(product.fields.images)) return null;
-  return (
-    <div className="flex flex-col gap-3">
-      {product.fields.images.map((image: any, index: number) => (
-        <Link
-          href={`#${image.id}`}
-          key={image.id}
-          className="block rounded-lg overflow-hidden border-2 border-gray-200 hover:border-gray-400 transition-colors"
-        >
-          <Image
-            src={image.url}
-            alt={product.fields.name}
-            width={80}
-            height={80}
-            className="w-full aspect-square object-cover"
-          />
-        </Link>
-      ))}
-    </div>
-  );
-};
-
-const ProductImages = ({ product }: { product: any }) => {
-  if (!isValidArray(product.fields.images)) {
-    return (
-      <div className="bg-gray-100 rounded-xl aspect-square flex items-center justify-center">
-        <span className="text-gray-400">Không có hình ảnh</span>
-      </div>
-    );
-  }
-  return (
-    <div className="flex flex-col gap-4">
-      {product.fields.images.map((image: any, index: number) => (
-        <div
-          key={image.id}
-          className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
-        >
-          <Image
-            className="w-full"
-            src={image.url}
-            alt={product.fields.name}
-            width={image.width}
-            height={image.height}
-            id={image.id}
-          />
-        </div>
-      ))}
-    </div>
-  );
-};

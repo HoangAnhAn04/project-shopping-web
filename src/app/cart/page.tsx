@@ -6,7 +6,7 @@ export default function Cart() {
       <div className="container px-4 mx-auto py-8 md:py-12">
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900">Giỏ hàng</h1>
-          <p className="text-gray-600 mt-2">Quản lý sản phẩm của bạn</p>
+          <p className="text-gray-600 mt-2">Đừng ki bo nữa...</p>
         </div>
         <CartList />
       </div>

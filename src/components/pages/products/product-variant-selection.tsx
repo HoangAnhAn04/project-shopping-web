@@ -15,7 +15,7 @@ export default function ProductVariantSelection(props: { product: any }) {
   const variants: any = getProductVariants(product.fields);
 
   const [price, setPrice] = useState(Number(getProductPrice(product.fields)));
-  const [selectedId, setSelectedId] = useState(variants[0].variants);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   return (
     <div className="space-y-6">
@@ -83,7 +83,12 @@ export default function ProductVariantSelection(props: { product: any }) {
       <Button
         size="lg"
         className="w-full text-lg font-semibold"
+        disabled={!selectedId}
         onClick={() => {
+          if (!selectedId) {
+            toast.error('Vui lòng chọn phân loại sản phẩm');
+            return;
+          }
           CartStore.add({
             product: {
               name: product.fields.name,
@@ -100,7 +105,7 @@ export default function ProductVariantSelection(props: { product: any }) {
           });
         }}
       >
-        Thêm vào giỏ hàng
+        {selectedId ? 'Thêm vào giỏ hàng' : 'Chọn loại sản phẩm'}
       </Button>
     </div>
   );
