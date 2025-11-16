@@ -62,8 +62,6 @@ export const OrderConfirmationEmail: React.FC<EmailProps> = ({
             <strong>#{orderId}</strong> của bạn đã được tiếp nhận và đang được xử lý.
           </Text>
 
-          <Hr style={hr} />
-
           {/* Order Details */}
           <Heading as="h2" style={subHeading}>
             Chi tiết đơn hàng
