@@ -166,9 +166,9 @@ export async function POST(request: Request) {
     // BƯỚC E.2 (MỚI): XÓA CACHE CỦA TRANG SẢN PHẨM
 
     // ----------------------------------------------------------------
-    // @ts-ignore
+    // @ts-expect-error -- revalidateTag là hàm hợp lệ của Next.js
     revalidateTag('all-products'); // <-- XÓA CACHE DANH SÁCH
-    // @ts-ignore
+    // @ts-expect-error -- revalidateTag là hàm hợp lệ của Next.js
     revalidateTag('products'); // <-- XÓA CACHE CHI TIẾT
 
     console.log('Đã xóa cache sản phẩm.');
