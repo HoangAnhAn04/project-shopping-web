@@ -2,7 +2,7 @@ import base from '@/utils/airtable';
 import { Fragment } from 'react/jsx-runtime';
 import ProductsList from '@/components/pages/products/products-list';
 import isValidArray from '@/utils/isValidArray';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import Pagination from '@/components/ui/pagination';
 import ProductSort, { SortOption } from '@/components/ui/product-sort';
 import { sortProducts } from '@/utils/sort_utils';
@@ -27,14 +27,34 @@ const getAllProducts = unstable_cache(
   { revalidate: 3600, tags: ['products'] }
 );
 
+// Valid sort options
+const VALID_SORT_OPTIONS: SortOption[] = [
+  'default',
+  'price-asc',
+  'price-desc',
+  'name-asc',
+  'name-desc',
+];
+
 export default async function ProductPage({
   searchParams,
 }: {
   searchParams: Promise<{ page?: string; sort?: string }>;
 }) {
   const params = await searchParams;
-  const currentPage = parseInt(params.page || '1', 10);
-  const sortBy = (params.sort as SortOption) || 'default';
+
+  // Validate page number
+  const pageNum = parseInt(params.page || '1', 10);
+  if (isNaN(pageNum) || pageNum < 1) {
+    redirect('/products?page=1');
+  }
+
+  // Validate sort option
+  const sortParam = params.sort as SortOption;
+  const sortBy = VALID_SORT_OPTIONS.includes(sortParam) ? sortParam : 'default';
+  if (params.sort && !VALID_SORT_OPTIONS.includes(sortParam)) {
+    redirect('/products?page=1');
+  }
 
   const allData = await getAllProducts();
 
@@ -51,6 +71,13 @@ export default async function ProductPage({
   // Tính toán pagination
   const totalItems = sortedData.length;
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+
+  // Validate page number against total pages
+  if (pageNum > totalPages && totalPages > 0) {
+    redirect(`/products?page=${totalPages}${sortBy !== 'default' ? `&sort=${sortBy}` : ''}`);
+  }
+
+  const currentPage = pageNum;
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const paginatedData = sortedData.slice(startIndex, endIndex);

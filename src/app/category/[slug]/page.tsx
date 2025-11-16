@@ -1,7 +1,7 @@
 // src/app/category/[slug]/page.tsx
 
 import base from '@/utils/airtable';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import isValidArray from '@/utils/isValidArray';
 import ProductsList from '@/components/pages/products/products-list';
 import Pagination from '@/components/ui/pagination';
@@ -14,6 +14,15 @@ const ITEMS_PER_PAGE = 12;
 
 // Cache data trong 1 giờ (3600 giây)
 export const revalidate = 3600;
+
+// Valid sort options
+const VALID_SORT_OPTIONS: SortOption[] = [
+  'default',
+  'price-asc',
+  'price-desc',
+  'name-asc',
+  'name-desc',
+];
 
 // Cache category lookup để tránh fetch 2 lần
 const getCategoryBySlug = unstable_cache(
@@ -67,8 +76,19 @@ export default async function CategoryPage({
 }) {
   const { slug } = await params;
   const urlParams = await searchParams;
-  const currentPage = parseInt(urlParams.page || '1', 10);
-  const sortBy = (urlParams.sort as SortOption) || 'default';
+
+  // Validate page number
+  const pageNum = parseInt(urlParams.page || '1', 10);
+  if (isNaN(pageNum) || pageNum < 1) {
+    redirect(`/category/${slug}?page=1`);
+  }
+
+  // Validate sort option
+  const sortParam = urlParams.sort as SortOption;
+  const sortBy = VALID_SORT_OPTIONS.includes(sortParam) ? sortParam : 'default';
+  if (urlParams.sort && !VALID_SORT_OPTIONS.includes(sortParam)) {
+    redirect(`/category/${slug}?page=1`);
+  }
 
   // Fetch category và products song song từ cache
   const [categories, allProducts] = await Promise.all([getCategoryBySlug(slug), getAllProducts()]);
@@ -93,6 +113,15 @@ export default async function CategoryPage({
   // Tính toán pagination
   const totalItems = sortedProducts.length;
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+
+  // Validate page number against total pages
+  if (pageNum > totalPages && totalPages > 0) {
+    redirect(
+      `/category/${slug}?page=${totalPages}${sortBy !== 'default' ? `&sort=${sortBy}` : ''}`
+    );
+  }
+
+  const currentPage = pageNum;
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const paginatedProducts = sortedProducts.slice(startIndex, endIndex);
