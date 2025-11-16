@@ -14,6 +14,7 @@ const ITEMS_PER_PAGE = 12;
 
 // Cache data trong 1 giờ (3600 giây)
 export const revalidate = 3600;
+export const dynamic = 'force-dynamic';
 
 // Valid sort options
 const VALID_SORT_OPTIONS: SortOption[] = [

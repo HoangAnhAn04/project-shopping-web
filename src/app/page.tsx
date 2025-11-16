@@ -3,6 +3,7 @@ import base from '@/utils/airtable';
 import type { Metadata } from 'next';
 
 export const revalidate = 3600;
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'ThapCamStore | Chất lượng - Giá tốt - Giao hàng nhanh',

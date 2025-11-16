@@ -3,6 +3,8 @@
 import React from 'react';
 import IntroCard from '@/components/pages/about/intro-card';
 
+export const dynamic = 'force-dynamic';
+
 export default function Page() {
   return (
     <div className="w-full flex flex-col items-center mt-10">

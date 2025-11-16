@@ -22,6 +22,8 @@ export const metadata: Metadata = {
   description: 'Shopping Web',
 };
 
+export const dynamic = 'force-dynamic';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -29,7 +31,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} suppressHydrationWarning={true}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning={true}
+      >
         <div className="flex min-h-screen flex-col justify-between">
           <Header />
           <main className={'mt-24'}>{children}</main>

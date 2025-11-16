@@ -1,6 +1,7 @@
 // src/components/layout/header.tsx
 
 import Link from 'next/link';
+import { Suspense } from 'react';
 import HeaderDropdownMenu from './header-dropdown-menu';
 import HeaderShoppingCart from './header-shopping-cart';
 import SearchInput from './search-input';
@@ -65,7 +66,9 @@ export default async function Header() {
 
         {/* Search Bar - Hidden on mobile */}
         <div className="hidden lg:flex flex-1 max-w-md">
-          <SearchInput />
+          <Suspense fallback={<div className="w-full h-10 bg-gray-100 rounded-lg animate-pulse" />}>
+            <SearchInput />
+          </Suspense>
         </div>
 
         {/* Right Section */}

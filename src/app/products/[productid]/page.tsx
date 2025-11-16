@@ -15,6 +15,7 @@ marked.setOptions({
 });
 
 export const revalidate = 3600;
+export const dynamic = 'force-dynamic';
 
 const getProductById = unstable_cache(
   async (productId: string) => {

@@ -13,6 +13,7 @@ const ITEMS_PER_PAGE = 12;
 
 // Cache data trong 1 giờ
 export const revalidate = 3600;
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Tất cả sản phẩm | Shopping Web',
