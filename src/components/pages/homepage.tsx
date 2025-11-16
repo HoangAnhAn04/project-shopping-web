@@ -1,7 +1,6 @@
 'use client';
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
 
-import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { PiShoppingBagOpen, PiTruck, PiShieldCheck } from 'react-icons/pi';
@@ -22,7 +21,7 @@ export default function Homepage(props: { data: any }) {
           {/* Left Content */}
           <div className="flex-1 text-center md:text-left">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">
-              Chỗ này cho thằng Vũ đặt tên
+              Ở đây bán mọi thứ bạn cần... mà chúng tôi chưa chắc đã có
             </h1>
             <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl">{shopSubtitle}</p>
 
@@ -76,7 +75,7 @@ export default function Homepage(props: { data: any }) {
           {/* Right Content - Featured Image */}
           <div className="flex-1 hidden md:block">
             <div className="relative w-full h-96 bg-gray-100 rounded-2xl overflow-hidden">
-              <Image src="/images/cityzen.jpg" alt="ThapCamStore" fill className="object-cover" />
+              <Image src="/images/banner.avif" alt="ThapCamStore" fill className="object-cover" />
             </div>
           </div>
         </div>
