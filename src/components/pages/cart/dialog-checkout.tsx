@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { email, z } from 'zod';
+import { z } from 'zod';
 import validator from 'validator';
 import React, { use } from 'react';
 import { useForm } from 'react-hook-form';
@@ -32,7 +32,9 @@ const checkoutFormSchema = z.object({
   name: z.string().min(2, {
     message: 'Ít nhất 2 ký tự',
   }),
-  email: z.string().email().or(z.literal('')),
+  email: z.string().min(1, { message: 'Email là bắt buộc' }).email({
+    message: 'Địa chỉ email không hợp lệ',
+  }),
   phone: z.string().refine(
     (phone) => {
       return validator.isMobilePhone(phone, 'vi-VN');
@@ -184,12 +186,15 @@ export default function DialogCheckout(props: {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-gray-900 font-medium">Email</FormLabel>
+                    <FormLabel className="text-gray-900 font-medium">
+                      Email <span className="text-red-600">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Input
                         type="email"
                         disabled={loading}
-                        placeholder="email@example.com (không bắt buộc)"
+                        required
+                        placeholder="email@example.com"
                         className="border-gray-300 focus:border-gray-900 focus:ring-gray-900"
                         {...field}
                       />
