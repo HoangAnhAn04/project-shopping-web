@@ -5,11 +5,10 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import { z } from 'zod';
 import validator from 'validator';
-import React, { use } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Form,
@@ -22,8 +21,6 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import base from '@/utils/airtable';
-import isValidArray from '@/utils/isValidArray';
 import { useCartStore } from '@/state/cart-store';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';

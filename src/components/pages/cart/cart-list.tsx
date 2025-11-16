@@ -10,16 +10,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import React from 'react';
 
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-
 export default function CartList() {
   const [checkoutDialog, setCheckoutDialog] = React.useState(false);
   const cartStore = useCartStore();

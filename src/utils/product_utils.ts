@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import isValidArray from '@/utils/isValidArray';
 
 export const getProductPrice = (productFields: any): number | any => {

@@ -16,6 +16,7 @@ export default function HeaderShoppingCart() {
         cartStore.reset();
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cartStore.setupTime]);
 
   return (

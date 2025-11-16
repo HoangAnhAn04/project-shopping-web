@@ -1,6 +1,5 @@
-import { Pi } from 'lucide-react';
 import Link from 'next/link';
-import { IoMail, IoMailOutline } from 'react-icons/io5';
+import { IoMailOutline } from 'react-icons/io5';
 import { PiFacebookLogo, PiInstagramLogo, PiPhone, PiYoutubeLogo } from 'react-icons/pi';
 
 export default function Footer() {

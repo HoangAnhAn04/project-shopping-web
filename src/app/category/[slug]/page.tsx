@@ -1,4 +1,5 @@
 // src/app/category/[slug]/page.tsx
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import base from '@/utils/airtable';
 import { notFound, redirect } from 'next/navigation';

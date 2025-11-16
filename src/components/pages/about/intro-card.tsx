@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import Image from 'next/image';
 
 type Props = {
   imageUrl: string;
@@ -12,8 +13,8 @@ type Props = {
 export default function IntroCard({ imageUrl, name, title, desc }: Props) {
   return (
     <div className="border rounded-xl overflow-hidden shadow-lg bg-white w-120">
-      <div className="w-full h-100 bg-gray-100">
-        <img src={imageUrl} alt={name} className="w-full h-full object-cover" />
+      <div className="w-full h-100 bg-gray-100 relative">
+        <Image src={imageUrl} alt={name} fill className="object-cover" />
       </div>
 
       <div className="p-6 text-center">

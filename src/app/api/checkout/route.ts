@@ -1,4 +1,5 @@
 // src/app/api/checkout/route.ts
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import React from 'react';

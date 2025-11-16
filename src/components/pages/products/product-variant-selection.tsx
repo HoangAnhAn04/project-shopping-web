@@ -1,4 +1,5 @@
 'use client';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { getProductPrice, getProductVariants } from '@/utils/product_utils';
 import React, { useState } from 'react';

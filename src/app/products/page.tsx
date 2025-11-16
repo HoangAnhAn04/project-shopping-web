@@ -1,5 +1,4 @@
 import base from '@/utils/airtable';
-import { Fragment } from 'react/jsx-runtime';
 import ProductsList from '@/components/pages/products/products-list';
 import isValidArray from '@/utils/isValidArray';
 import { notFound, redirect } from 'next/navigation';

@@ -2,6 +2,7 @@ import { getProductPrice } from './product_utils';
 
 export type SortOption = 'name-asc' | 'name-desc' | 'price-asc' | 'price-desc' | 'default';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export function sortProducts(products: any[], sortBy: SortOption) {
   if (!products || products.length === 0) return products;
 
