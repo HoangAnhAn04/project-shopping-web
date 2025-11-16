@@ -5,12 +5,47 @@ import { resolveRichText } from '@/utils/product_utils';
 import { marked } from 'marked';
 import ProductVariantSelection from '@/components/pages/products/product-variant-selection';
 import ProductImageGallery from '@/components/pages/products/product-image-gallery';
+import type { Metadata } from 'next';
+import { unstable_cache } from 'next/cache';
 
 // Configure marked
 marked.setOptions({
   breaks: true,
   gfm: true,
 });
+
+export const revalidate = 3600;
+
+const getProductById = unstable_cache(
+  async (productId: string) => {
+    return await base('products')
+      .select({
+        filterByFormula: `RECORD_ID() = '${productId}'`,
+      })
+      .all();
+  },
+  ['product-by-id'],
+  { revalidate: 3600, tags: ['products'] }
+);
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ productId: string }>;
+}): Promise<Metadata> {
+  const { productId } = await params;
+  const data = await getProductById(productId);
+
+  if (!isValidArray(data)) {
+    return { title: 'Sản phẩm không tồn tại' };
+  }
+
+  const product = data[0];
+  return {
+    title: `${product.fields.name} | Shopping Web`,
+    description: `${product.fields.description || 'Xem chi tiết sản phẩm'}`.substring(0, 160),
+  };
+}
 
 export default async function SingleProduct({
   params,
@@ -19,11 +54,7 @@ export default async function SingleProduct({
 }) {
   const { productId } = await params;
 
-  const data = await base('products')
-    .select({
-      filterByFormula: `RECORD_ID() = '${productId}'`,
-    })
-    .all();
+  const data = await getProductById(productId);
 
   if (!isValidArray(data)) {
     return notFound();

@@ -1,5 +1,13 @@
 import Homepage from '@/components/pages/homepage';
 import base from '@/utils/airtable';
+import type { Metadata } from 'next';
+
+export const revalidate = 3600;
+
+export const metadata: Metadata = {
+  title: 'ThapCamStore | Chất lượng - Giá tốt - Giao hàng nhanh',
+  description: 'Khám phá bộ sưu tập sản phẩm đa dạng với giá tốt nhất',
+};
 
 export default async function Home() {
   const products = await base('products')

@@ -5,13 +5,22 @@ import HeaderDropdownMenu from './header-dropdown-menu';
 import HeaderShoppingCart from './header-shopping-cart';
 import SearchInput from './search-input';
 import base from '@/utils/airtable';
+import { unstable_cache } from 'next/cache';
+
+const getCategories = unstable_cache(
+  async () => {
+    return await base('Categories')
+      .select({
+        sort: [{ field: 'name', direction: 'asc' }],
+      })
+      .firstPage();
+  },
+  ['header-categories'],
+  { revalidate: 3600, tags: ['categories'] }
+);
 
 export default async function Header() {
-  const categories = await base('Categories')
-    .select({
-      sort: [{ field: 'name', direction: 'asc' }],
-    })
-    .firstPage();
+  const categories = await getCategories();
 
   const categoryFields = categories.map((record) => ({
     id: record.id,

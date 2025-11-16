@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { unstable_cache } from 'next/cache';
 import base from '@/utils/airtable';
 
 // Helper: Normalize Vietnamese text (remove accents)
@@ -10,6 +11,25 @@ function normalizeVietnamese(str: string): string {
     .replace(/đ/g, 'd')
     .replace(/Đ/g, 'd');
 }
+
+// Fetch all products with Next.js cache (revalidate every 5 minutes)
+const getAllProducts = unstable_cache(
+  async () => {
+    console.log('🔄 Fetching all products from Airtable...');
+    const records = await base('products')
+      .select({
+        view: 'Grid view',
+      })
+      .all();
+    console.log(`✅ Fetched ${records.length} products`);
+    return records;
+  },
+  ['all-products'], // Cache key
+  {
+    revalidate: 300, // 5 minutes in seconds
+    tags: ['products'],
+  }
+);
 
 // Simple synonym dictionary (có thể mở rộng)
 const SYNONYMS: Record<string, string[]> = {
@@ -70,23 +90,16 @@ export async function GET(request: NextRequest) {
 
     console.log('🔄 Query variants:', queryVariants);
 
-    // Phương pháp hybrid: Lấy giới hạn records rồi filter
-    const products = await base('products')
-      .select({
-        maxRecords: 100, // Giảm xuống 100 để nhanh hơn
-        view: 'Grid view',
-      })
-      .all();
+    // Fetch tất cả products từ cache
+    const allProducts = await getAllProducts();
+    console.log('📦 Total products in cache:', allProducts.length);
 
-    console.log('📦 Total records fetched:', products.length);
-
-    // Simple & Fast ranking - bỏ fuzzy search cho performance
-    const filteredProducts = products
+    // Filter và ranking với normalize tiếng Việt
+    const filteredProducts = allProducts
       .map((record) => {
         const fields = record.fields as {
           name?: string;
           description?: string;
-          price?: number;
           slug?: string;
           images?: string[];
         };
@@ -96,74 +109,62 @@ export async function GET(request: NextRequest) {
 
         let score = 0;
 
-        // Check query variants (max 3-4 variants để nhanh)
+        // Check tất cả query variants
         for (const variant of queryVariants) {
           const normalizedVariant = normalizeVietnamese(variant);
 
-          // 1. EXACT MATCH
+          // 1. EXACT MATCH (có dấu hoặc không dấu)
           if (name === variant || normalizedName === normalizedVariant) {
             score = Math.max(score, 100);
-            break; // Tìm được rồi thì dừng luôn
+            break;
           }
 
-          // 2. STARTS WITH
+          // 2. STARTS WITH (có dấu hoặc không dấu)
           if (name.startsWith(variant) || normalizedName.startsWith(normalizedVariant)) {
             score = Math.max(score, 80);
             break;
           }
 
-          // 3. CONTAINS (substring) - đơn giản nhất, nhanh nhất
+          // 3. CONTAINS (có dấu hoặc không dấu) - KEY: tìm "chay" → "chày"
           if (name.includes(variant) || normalizedName.includes(normalizedVariant)) {
-            const firstWord = name.split(/\s+/)[0];
-            score = Math.max(score, firstWord.includes(variant) ? 60 : 40);
+            score = Math.max(score, 60);
             break;
           }
         }
 
         return { record, score };
       })
-      .filter((item) => item.score > 0)
+      .filter((item) => item.score > 0) // Chỉ lấy có match
       .sort((a, b) => b.score - a.score)
+      .slice(0, 50) // Limit kết quả
       .map((item) => item.record);
 
     console.log('✅ Filtered products found:', filteredProducts.length);
 
     // Map kết quả và validate dữ liệu
     const validProducts = filteredProducts
-      .slice(0, 50) // Giới hạn kết quả trả về
+      .slice(0, 30) // Giảm xuống 30 để nhanh hơn
       .map((record) => {
         const fields = record.fields as {
           name?: string;
           description?: string;
-          price?: number;
           slug?: string;
           images?: Array<{ url?: string; thumbnails?: any }> | string[];
-          variant_price?: number | number[];
+          variant_price?: number[];
+          variant_image?: string[];
         };
 
-        console.log('🔍 Processing product:', fields.name, {
-          hasSlug: !!fields.slug,
-          hasPrice: !!fields.price,
-          hasVariantPrice: !!fields.variant_price,
-        });
-
-        // Validate required fields - relax validation
-        if (!fields.name) {
+        // Validate required fields
+        if (
+          !fields.name ||
+          !Array.isArray(fields.variant_price) ||
+          fields.variant_price.length === 0
+        ) {
           return null;
         }
 
-        // Use first variant price if main price doesn't exist
-        let price = fields.price;
-        if (!price && fields.variant_price) {
-          price = Array.isArray(fields.variant_price)
-            ? fields.variant_price[0]
-            : fields.variant_price;
-        }
-
-        if (!price) {
-          console.log('❌ Skipping product (no price):', fields.name);
-          return null;
-        }
+        // Get lowest price from variants
+        const price = Math.min(...fields.variant_price);
 
         // Generate slug if not exists (for display purposes only)
         const slug =

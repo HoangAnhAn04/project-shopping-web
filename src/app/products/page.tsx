@@ -6,8 +6,26 @@ import { notFound } from 'next/navigation';
 import Pagination from '@/components/ui/pagination';
 import ProductSort, { SortOption } from '@/components/ui/product-sort';
 import { sortProducts } from '@/utils/sort_utils';
+import type { Metadata } from 'next';
+import { unstable_cache } from 'next/cache';
 
 const ITEMS_PER_PAGE = 12;
+
+// Cache data trong 1 giờ
+export const revalidate = 3600;
+
+export const metadata: Metadata = {
+  title: 'Tất cả sản phẩm | Shopping Web',
+  description: 'Khám phá bộ sưu tập sản phẩm đa dạng với giá tốt nhất',
+};
+
+const getAllProducts = unstable_cache(
+  async () => {
+    return await base('products').select({}).all();
+  },
+  ['all-products'],
+  { revalidate: 3600, tags: ['products'] }
+);
 
 export default async function ProductPage({
   searchParams,
@@ -18,7 +36,7 @@ export default async function ProductPage({
   const currentPage = parseInt(params.page || '1', 10);
   const sortBy = (params.sort as SortOption) || 'default';
 
-  const allData = await base('products').select({}).all();
+  const allData = await getAllProducts();
 
   if (!isValidArray(allData)) {
     return notFound();

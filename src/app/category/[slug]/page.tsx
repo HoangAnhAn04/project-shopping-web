@@ -7,8 +7,56 @@ import ProductsList from '@/components/pages/products/products-list';
 import Pagination from '@/components/ui/pagination';
 import ProductSort, { SortOption } from '@/components/ui/product-sort';
 import { sortProducts } from '@/utils/sort_utils';
+import type { Metadata } from 'next';
+import { unstable_cache } from 'next/cache';
 
 const ITEMS_PER_PAGE = 12;
+
+// Cache data trong 1 giờ (3600 giây)
+export const revalidate = 3600;
+
+// Cache category lookup để tránh fetch 2 lần
+const getCategoryBySlug = unstable_cache(
+  async (slug: string) => {
+    const categories = await base('categories')
+      .select({
+        filterByFormula: `{slug} = "${slug}"`,
+        maxRecords: 1,
+      })
+      .firstPage();
+    return categories;
+  },
+  ['category-by-slug'],
+  { revalidate: 3600, tags: ['categories'] }
+);
+
+// Cache all products
+const getAllProducts = unstable_cache(
+  async () => {
+    return await base('products').select({}).all();
+  },
+  ['all-products'],
+  { revalidate: 3600, tags: ['products'] }
+);
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const categories = await getCategoryBySlug(slug);
+
+  if (!isValidArray(categories)) {
+    return { title: 'Danh mục không tồn tại' };
+  }
+
+  const categoryName = categories[0].fields.name as string;
+  return {
+    title: `${categoryName} | Shopping Web`,
+    description: `Khám phá sản phẩm ${categoryName} với giá tốt nhất`,
+  };
+}
 
 export default async function CategoryPage({
   params,
@@ -22,11 +70,8 @@ export default async function CategoryPage({
   const currentPage = parseInt(urlParams.page || '1', 10);
   const sortBy = (urlParams.sort as SortOption) || 'default';
 
-  const categories = await base('categories')
-    .select({
-      filterByFormula: `{slug} = "${slug}"`,
-    })
-    .all();
+  // Fetch category và products song song từ cache
+  const [categories, allProducts] = await Promise.all([getCategoryBySlug(slug), getAllProducts()]);
 
   if (!isValidArray(categories)) {
     return notFound();
@@ -36,8 +81,7 @@ export default async function CategoryPage({
   const categoryId = category.id;
   const categoryName = category.fields.name as string;
 
-  const allProducts = await base('products').select({}).all();
-
+  // Filter products theo category
   const products = allProducts.filter((product: any) => {
     const productCategories = product.fields.category;
     return Array.isArray(productCategories) && productCategories.includes(categoryId);
