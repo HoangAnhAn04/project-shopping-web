@@ -1,130 +1,78 @@
-# 🛒 Shopping Web
+# XÂY DỰNG WEBSITE BÁN HÀNG TRỰC TUYẾN (SHOPPING WEB)
 
-## 1. Mở đầu
+> **Bài tập lớn môn:** Phát triển Phần mềm Mã nguồn mở  
+> **Học kỳ:** 1 - Năm học: 2025-2026
 
-Đây là dự án website thương mại điện tử mini cho phép xem, tìm kiếm, đặt hàng sản phẩm và nhận email xác nhận.
+---
 
-## 👥 Thông tin chung
+## 1. THÔNG TIN CHUNG
 
-**Nhóm thực hiện:**
+| Mục                      | Thông tin                         |
+| :----------------------- | :-------------------------------- |
+| **Giảng viên hướng dẫn** | TS. Đào Thị Lệ Thủy               |
+| **Nhóm thực hiện**       | Nhóm [Số nhóm]                    |
+| **Thành viên 1**         | An Hoàng Anh ([Mã SV])            |
+| **Thành viên 2**         | Nguyễn Công Thành ([Mã SV])       |
+| **Thành viên 3**         | Lê Đỗ Gia Vũ ([Mã SV])            |
+| **Link Demo**            | [Dán link Vercel của bạn vào đây] |
 
-- An Hoàng Anh
-- Nguyễn Công Thành
-- Lê Đỗ Gia Vũ
+---
 
-**Giảng viên hướng dẫn:** Đào Thị Lệ Thủy
-**Thời gian thực hiện:** Học kỳ 1 - Năm 2025/2026
+## 2. GIỚI THIỆU ĐỀ TÀI
 
-## 2. Mô tả ngắn gọn
+### 2.1. Tổng quan
 
-Website xây dựng bằng Next.js, React, TypeScript, sử dụng Airtable làm cơ sở dữ liệu và Resend để gửi email xác nhận đơn hàng. Giao diện hiện đại, tối ưu cho mọi thiết bị.
+Đây là dự án website thương mại điện tử (E-commerce) tập trung vào trải nghiệm mua sắm nhanh chóng và hiện đại. Dự án áp dụng mô hình **Headless CMS** với Airtable làm cơ sở dữ liệu và Next.js làm nền tảng Frontend/Backend.
 
-## 3. Tính năng chính
+### 2.2. Tính năng chính
 
-- Xem danh sách, chi tiết sản phẩm, phân trang, duyệt theo danh mục, sắp xếp
-- Tìm kiếm sản phẩm tiếng Việt (có/không dấu, synonym, fuzzy)
-- Thêm/xóa/cập nhật giỏ hàng, đặt hàng, nhận email xác nhận
-- Validate dữ liệu, xử lý lỗi, tối ưu tốc độ tải trang
+- **Duyệt sản phẩm:** Xem danh sách, lọc theo danh mục, xem chi tiết, ảnh zoom.
+- **Tìm kiếm thông minh (Instant Search):** Tìm kiếm tức thì không cần tải lại trang, hỗ trợ tiếng Việt có dấu/không dấu.
+- **Giỏ hàng (Cart):** Thêm/sửa/xóa sản phẩm, tự động tính tổng tiền, lưu trạng thái (persist) để không mất hàng khi tải lại trang.
+- **Đặt hàng (Checkout):** Form điền thông tin có validate chặt chẽ, gửi đơn hàng về Database.
+- **Thông báo tự động:** Tích hợp API gửi email xác nhận đơn hàng tự động cho khách.
 
-## 4. Công nghệ sử dụng
+---
 
-### Frontend
+## 3. CÔNG NGHỆ SỬ DỤNG
 
-- **Next.js 16** (App Router, API routes, SSR, caching)
-- **React 19**
-- **TypeScript**
-- **Tailwind CSS** (qua @tailwindcss/postcss, tw-animate-css, tailwind-merge)
-- **shadcn/ui** (UI components)
-- **Radix UI** (`@radix-ui/react-*`)
-- **Zustand** (quản lý state giỏ hàng, dùng middleware `immer`, `persist`)
-- **immer** (bất biến hóa state)
-- **react-hook-form** + **zod** (form validation)
-- **lucide-react**, **react-icons** (icons)
-- **sonner** (toast notification)
-- **next-themes** (theme switcher)
-- **class-variance-authority**, **clsx** (quản lý className động)
-- **tailwind-merge** (gộp class Tailwind)
+Dự án sử dụng các công nghệ mã nguồn mở mới nhất (Cutting-edge Tech Stack) để đảm bảo hiệu năng và tính mở rộng.
 
-### Backend & Database
+### 3.1. Frontend
 
-- **Airtable** (NoSQL cloud database)
-- **Resend** (dịch vụ gửi email)
-- **Next.js API Routes** (backend endpoints)
+- **Next.js 16 (App Router):** Framework React mạnh mẽ nhất hiện nay, hỗ trợ Server-Side Rendering (SSR) và API Routes.
+- **React 19:** Thư viện UI cốt lõi với các cải tiến mới nhất về hiệu năng.
+- **TypeScript:** Ngôn ngữ lập trình định kiểu tĩnh, giúp code an toàn và dễ bảo trì.
+- **Tailwind CSS:** Framework CSS ưu tiên tiện ích (utility-first) giúp thiết kế giao diện nhanh chóng.
+- **shadcn/ui & Radix UI:** Hệ thống component giao diện hiện đại, dễ tiếp cận (Accessible) và tùy biến cao.
+- **Zustand & Immer:** Quản lý trạng thái giỏ hàng (State Management) hiệu quả và đơn giản.
 
-### Tooling & Khác
+### 3.2. Backend & Database
 
-- **ESLint** (cấu hình với `eslint-config-next`)
-- **PostCSS** (qua file `postcss.config.mjs`)
-- **Google Fonts (Geist, Geist_Mono)**
-- **Node.js 18+**
-- **npm/yarn/pnpm**
+- **Airtable:** Sử dụng làm cơ sở dữ liệu đám mây (NoSQL Cloud Database), giúp quản lý sản phẩm/đơn hàng trực quan như Excel.
+- **Next.js API Routes:** Đóng vai trò là Backend Endpoints để xử lý logic tìm kiếm và đặt hàng bảo mật.
+- **Resend:** Dịch vụ gửi email transaction (xác nhận đơn hàng) chuyên nghiệp.
 
-## 5. Hướng dẫn chi tiết cài đặt và chạy dự án
+### 3.3. Thư viện hỗ trợ (Libraries)
+
+- **Form & Validation:** `react-hook-form`, `zod`, `validator`.
+- **Tiện ích:** `clsx`, `tailwind-merge`, `class-variance-authority` (xử lý CSS), `sonner` (thông báo Toast).
+- **Nội dung:** `marked` (Xử lý mô tả sản phẩm dạng Markdown).
+- **Icons:** `lucide-react`, `react-icons`.
+
+---
+
+## 4. HƯỚNG DẪN CÀI ĐẶT VÀ TRIỂN KHAI
 
 ### Bước 1: Chuẩn bị môi trường
 
-- Cài đặt **Node.js** (>= 18)
-- Đăng ký tài khoản **Airtable** (tạo base, bảng products, products-variants, orders, orders-products, categories)
-- Đăng ký tài khoản **Resend** (lấy API key)
-- (Khuyến nghị) Đăng ký tài khoản **Vercel** để deploy nhanh
+- Cài đặt **Node.js** (Phiên bản 18 trở lên).
+- Tài khoản **Airtable** (đã setup các bảng: `products`, `categories`, `orders`...).
+- Tài khoản **Resend** (để lấy API Key gửi mail).
 
 ### Bước 2: Clone mã nguồn
 
-Mở terminal trong thư mục bạn muốn lưu project, chạy lệnh:
-
-```sh
-git clone https://github.com/HoangAnhAn04/project-shopping-web.git
+```bash
+git clone [https://github.com/HoangAnhAn04/project-shopping-web.git](https://github.com/HoangAnhAn04/project-shopping-web.git)
 cd project-shopping-web
 ```
-
-### Bước 3: Cài đặt dependencies
-
-Chạy một trong các lệnh sau để cài đặt toàn bộ dependencies đã được khai báo trong file `package.json`:
-
-```sh
-npm install
-# hoặc
-yarn install
-# hoặc
-pnpm install
-```
-
-**Lưu ý:**
-
-- Không cần cài từng thư viện riêng lẻ, chỉ cần chạy `npm install` là đủ.
-- Nếu gặp lỗi thiếu package, kiểm tra lại file `package.json` hoặc chạy lại lệnh cài đặt.
-
-### Bước 4: Tạo file cấu hình môi trường
-
-Tạo file `.env.local` ở thư mục gốc với nội dung mẫu:
-
-```env
-AIRTABLE_API_KEY=pat_xxx
-AIRTABLE_BASE_ID=app_xxx
-AIRTABLE_ORDERS_TABLE_NAME=orders
-RESEND_API_KEY=re_xxx
-```
-
-> Thay các giá trị bằng thông tin thực tế của bạn (lấy từ Airtable và Resend).
-
-### Bước 5: Chạy chương trình ở chế độ phát triển
-
-```sh
-npm run dev
-```
-
-Truy cập [http://localhost:3000](http://localhost:3000) để xem website.
-
-### Bước 6: Build và chạy production (tùy chọn)
-
-```sh
-npm run build
-npm start
-```
-
-### Bước 7: Triển khai lên Vercel (khuyến nghị)
-
-- Đăng nhập [vercel.com](https://vercel.com), kết nối repo GitHub, thiết lập biến môi trường trên dashboard Vercel, deploy tự động.
-- Có thể cấu hình tên miền riêng nếu muốn.
-
----
