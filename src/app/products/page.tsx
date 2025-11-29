@@ -6,7 +6,7 @@ import Pagination from '@/components/ui/pagination';
 import ProductSort, { SortOption } from '@/components/ui/product-sort';
 import { sortProducts } from '@/utils/sort_utils';
 import type { Metadata } from 'next';
-import { unstable_cache } from 'next/cache'; // <--- KHÔI PHỤC IMPORT NÀY
+import { unstable_cache } from 'next/cache';
 const ITEMS_PER_PAGE = 12;
 
 // Cache data trong 1 giờ

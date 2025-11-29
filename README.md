@@ -1,112 +1,87 @@
-# 🛒 ThapCamStore - Shopping Web Application
+# 🛒 Shopping Web
 
-**Bài tập lớn môn Phát triển phần mềm nguồn mở**
+## 1. Mở đầu
 
-Website thương mại điện tử được xây dựng với Next.js 16 và Airtable, tích hợp các tính năng hiện đại như caching, pagination, search với normalize tiếng Việt.
-
----
-
-## 📋 Mục lục
-
-- [Thông tin chung](#thông-tin-chung)
-- [Tính năng](#tính-năng)
-- [Công nghệ sử dụng](#công-nghệ-sử-dụng)
-- [Cài đặt và chạy](#cài-đặt-và-chạy)
-- [Cấu trúc thư mục](#cấu-trúc-thư-mục)
-- [Tối ưu hóa](#tối-ưu-hóa)
-- [API Endpoints](#api-endpoints)
-
----
+Đây là dự án website thương mại điện tử mini cho phép xem, tìm kiếm, đặt hàng sản phẩm và nhận email xác nhận.
 
 ## 👥 Thông tin chung
 
 **Nhóm thực hiện:**
 
-- Sinh viên 1: [An Hoàng Anh]
-- Sinh viên 2: [Nguyễn Công Thành]
-- Sinh viên 3: [Lê Đỗ Gia Vũ]
+- An Hoàng Anh
+- Nguyễn Công Thành
+- Lê Đỗ Gia Vũ
 
-**Giảng viên hướng dẫn:** [Đào Thị Lệ Thủy]
-
+**Giảng viên hướng dẫn:** Đào Thị Lệ Thủy
 **Thời gian thực hiện:** Học kỳ 1 - Năm 2025/2026
 
----
+## 2. Mô tả ngắn gọn
 
-## ✨ Tính năng
+Website xây dựng bằng Next.js, React, TypeScript, sử dụng Airtable làm cơ sở dữ liệu và Resend để gửi email xác nhận đơn hàng. Giao diện hiện đại, tối ưu cho mọi thiết bị.
 
-### 🏠 **Người dùng**
+## 3. Tính năng chính
 
-- ✅ Xem danh sách sản phẩm với phân trang (12 sản phẩm/trang)
-- ✅ Tìm kiếm sản phẩm với normalize tiếng Việt (có/không dấu đều được)
-- ✅ Lọc sản phẩm theo danh mục
-- ✅ Sắp xếp sản phẩm (tên, giá tăng/giảm)
-- ✅ Xem chi tiết sản phẩm với nhiều biến thể (kích thước, màu sắc)
-- ✅ Giỏ hàng (thêm, xóa, cập nhật số lượng)
-- ✅ Đặt hàng và nhận email xác nhận
+- Xem danh sách, chi tiết sản phẩm, phân trang, duyệt theo danh mục, sắp xếp
+- Tìm kiếm sản phẩm tiếng Việt (có/không dấu, synonym, fuzzy)
+- Thêm/xóa/cập nhật giỏ hàng, đặt hàng, nhận email xác nhận
+- Validate dữ liệu, xử lý lỗi, tối ưu tốc độ tải trang
 
-### 🎨 **Giao diện**
+## 4. Công nghệ sử dụng
 
-- ✅ Responsive design (Mobile, Tablet, Desktop)
-- ✅ UI hiện đại với Tailwind CSS
-- ✅ Components tái sử dụng (shadcn/ui)
+### Frontend
 
-### ⚡ **Performance**
+- **Next.js 16** (App Router, API routes, SSR, caching)
+- **React 19**
+- **TypeScript**
+- **Tailwind CSS** (qua @tailwindcss/postcss, tw-animate-css, tailwind-merge)
+- **shadcn/ui** (UI components)
+- **Radix UI** (`@radix-ui/react-*`)
+- **Zustand** (quản lý state giỏ hàng, dùng middleware `immer`, `persist`)
+- **immer** (bất biến hóa state)
+- **react-hook-form** + **zod** (form validation)
+- **lucide-react**, **react-icons** (icons)
+- **sonner** (toast notification)
+- **next-themes** (theme switcher)
+- **class-variance-authority**, **clsx** (quản lý className động)
+- **tailwind-merge** (gộp class Tailwind)
 
-- ✅ Server-side caching (1 giờ)
-- ✅ Tối ưu hóa data fetching với `unstable_cache`
-- ✅ Thời gian load: **28-75ms** (sau cache)
+### Backend & Database
 
-### 🔒 **Validation**
+- **Airtable** (NoSQL cloud database)
+- **Resend** (dịch vụ gửi email)
+- **Next.js API Routes** (backend endpoints)
 
-- ✅ Validate page number (tự động redirect nếu không hợp lệ)
-- ✅ Validate sort parameters
-- ✅ Xử lý lỗi 404 cho sản phẩm/danh mục không tồn tại
+### Tooling & Khác
 
----
+- **ESLint** (cấu hình với `eslint-config-next`)
+- **PostCSS** (qua file `postcss.config.mjs`)
+- **Google Fonts (Geist, Geist_Mono)**
+- **Node.js 18+**
+- **npm/yarn/pnpm**
 
-## 🛠 Công nghệ sử dụng
+## 5. Hướng dẫn chi tiết cài đặt và chạy dự án
 
-### **Frontend**
+### Bước 1: Chuẩn bị môi trường
 
-- **Next.js 16** - React Framework với App Router
-- **React 19** - UI Library
-- **TypeScript** - Type safety
-- **Tailwind CSS** - Utility-first CSS
-- **shadcn/ui** - Component library
-- **Zustand** - State management (giỏ hàng)
+- Cài đặt **Node.js** (>= 18)
+- Đăng ký tài khoản **Airtable** (tạo base, bảng products, products-variants, orders, orders-products, categories)
+- Đăng ký tài khoản **Resend** (lấy API key)
+- (Khuyến nghị) Đăng ký tài khoản **Vercel** để deploy nhanh
 
-### **Backend & Database**
+### Bước 2: Clone mã nguồn
 
-- **Airtable** - Cloud database (NoSQL)
-- **Next.js API Routes** - Backend endpoints
-- **Resend** - Email service
+Mở terminal trong thư mục bạn muốn lưu project, chạy lệnh:
 
-### **Libraries**
-
-- `marked` - Markdown parser
-- `react-hook-form` + `zod` - Form validation
-- `lucide-react` - Icons
-- `sonner` - Toast notifications
-
----
-
-## 🚀 Cài đặt và chạy
-
-### **Yêu cầu hệ thống**
-
-- Node.js 18+ hoặc 20+
-- npm, yarn, hoặc pnpm
-
-### **Bước 1: Clone repository**
-
-```bash
+```sh
 git clone https://github.com/HoangAnhAn04/project-shopping-web.git
 cd project-shopping-web
 ```
 
-### **Bước 2: Cài đặt dependencies**
+### Bước 3: Cài đặt dependencies
 
-```bash
+Chạy một trong các lệnh sau để cài đặt toàn bộ dependencies đã được khai báo trong file `package.json`:
+
+```sh
 npm install
 # hoặc
 yarn install
@@ -114,183 +89,42 @@ yarn install
 pnpm install
 ```
 
-### **Bước 3: Cấu hình môi trường**
+**Lưu ý:**
 
-Tạo file `.env.local` với nội dung:
+- Không cần cài từng thư viện riêng lẻ, chỉ cần chạy `npm install` là đủ.
+- Nếu gặp lỗi thiếu package, kiểm tra lại file `package.json` hoặc chạy lại lệnh cài đặt.
+
+### Bước 4: Tạo file cấu hình môi trường
+
+Tạo file `.env.local` ở thư mục gốc với nội dung mẫu:
 
 ```env
-NEXT_PUBLIC_AIRTABLE_ACCESS_TOKEN=your_airtable_token
-AIRTABLE_BASE_ID=your_base_id
+AIRTABLE_API_KEY=pat_xxx
+AIRTABLE_BASE_ID=app_xxx
 AIRTABLE_ORDERS_TABLE_NAME=orders
-RESEND_API_KEY=your_resend_key
+RESEND_API_KEY=re_xxx
 ```
 
-### **Bước 4: Chạy development server**
+> Thay các giá trị bằng thông tin thực tế của bạn (lấy từ Airtable và Resend).
 
-```bash
+### Bước 5: Chạy chương trình ở chế độ phát triển
+
+```sh
 npm run dev
 ```
 
-Mở [http://localhost:3000](http://localhost:3000) để xem kết quả.
+Truy cập [http://localhost:3000](http://localhost:3000) để xem website.
 
-### **Bước 5: Build production**
+### Bước 6: Build và chạy production (tùy chọn)
 
-```bash
+```sh
 npm run build
 npm start
 ```
 
----
+### Bước 7: Triển khai lên Vercel (khuyến nghị)
 
-## 📁 Cấu trúc thư mục
-
-```
-shopping-web/
-├── src/
-│   ├── app/                      # Next.js App Router
-│   │   ├── page.tsx             # Trang chủ
-│   │   ├── products/            # Danh sách & chi tiết sản phẩm
-│   │   ├── category/[slug]/     # Trang danh mục
-│   │   ├── cart/                # Giỏ hàng
-│   │   ├── search/              # Tìm kiếm
-│   │   └── api/                 # API routes
-│   │       ├── search/          # API tìm kiếm
-│   │       └── checkout/        # API đặt hàng
-│   ├── components/              # React components
-│   │   ├── layout/              # Header, Footer
-│   │   ├── pages/               # Page-specific components
-│   │   └── ui/                  # Reusable UI components
-│   ├── lib/                     # Utilities
-│   ├── state/                   # Zustand stores
-│   ├── types/                   # TypeScript types
-│   └── utils/                   # Helper functions
-├── public/                      # Static assets
-└── README.md                    # File này
-```
+- Đăng nhập [vercel.com](https://vercel.com), kết nối repo GitHub, thiết lập biến môi trường trên dashboard Vercel, deploy tự động.
+- Có thể cấu hình tên miền riêng nếu muốn.
 
 ---
-
-## ⚡ Tối ưu hóa
-
-### **1. Caching Strategy**
-
-```typescript
-// Tất cả trang đều có cache 1 giờ
-export const revalidate = 3600;
-
-// Data fetching với unstable_cache
-const getAllProducts = unstable_cache(
-  async () => await base('products').select({}).all(),
-  ['all-products'],
-  { revalidate: 3600, tags: ['products'] }
-);
-```
-
-**Kết quả:**
-
-- Lần đầu: ~1.7s (fetch từ Airtable)
-- Lần sau: **28-75ms** (từ cache) - Giảm **95%**
-
-### **2. Validation & Error Handling**
-
-```typescript
-// Validate page number
-if (isNaN(pageNum) || pageNum < 1) {
-  redirect('/products?page=1');
-}
-
-// Validate page > totalPages
-if (pageNum > totalPages && totalPages > 0) {
-  redirect(`/products?page=${totalPages}`);
-}
-```
-
-### **3. Search Optimization**
-
-- Normalize tiếng Việt (loại bỏ dấu)
-- Synonym support
-- Fuzzy matching (exact match, starts with, contains)
-- Cache 5 phút
-
----
-
-## 🌐 API Endpoints
-
-### **GET /api/search**
-
-Tìm kiếm sản phẩm
-
-**Query params:**
-
-- `q` (string, required): Từ khóa tìm kiếm
-
-**Response:**
-
-```json
-{
-  "products": [...],
-  "total": 10
-}
-```
-
-### **POST /api/checkout**
-
-Đặt hàng
-
-**Body:**
-
-```json
-{
-  "values": {
-    "name": "string",
-    "email": "string",
-    "phone": "string",
-    "address": "string"
-  },
-  "cartItems": [...],
-  "cartTotal": 100000
-}
-```
-
-**Response:**
-
-```json
-{
-  "success": true,
-  "orderId": "rec123"
-}
-```
-
----
-
-## 📊 Performance Metrics
-
-| Trang          | Lần đầu (cold) | Lần sau (cached) | Cải thiện |
-| -------------- | -------------- | ---------------- | --------- |
-| Homepage       | ~1.5s          | ~50ms            | 97%       |
-| Products       | ~1.7s          | ~75ms            | 95%       |
-| Category       | ~2.5s          | ~50ms            | 98%       |
-| Product Detail | ~1.5s          | ~80ms            | 95%       |
-
----
-
-## 🐛 Known Issues
-
-- Airtable API key đang dùng `NEXT_PUBLIC_*` (không an toàn cho production)
-- Chưa có rate limiting cho APIs
-- Chưa sanitize HTML trong product description
-
-**Lưu ý:** Đây là bài tập lớn nên chưa cần fix các issues trên.
-
----
-
-## 📝 License
-
-This is a student project for educational purposes.
-
----
-
-## 📞 Liên hệ
-
-- GitHub: [HoangAnhAn04](https://github.com/HoangAnhAn04)
-- Repository: [project-shopping-web](https://github.com/HoangAnhAn04/project-shopping-web)
