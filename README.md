@@ -7,14 +7,14 @@
 
 ## 1. THÔNG TIN CHUNG
 
-| Mục                      | Thông tin                         |
-| :----------------------- | :-------------------------------- |
-| **Giảng viên hướng dẫn** | TS. Đào Thị Lệ Thủy               |
-| **Nhóm thực hiện**       | Nhóm [Số nhóm]                    |
-| **Thành viên 1**         | An Hoàng Anh ([Mã SV])            |
-| **Thành viên 2**         | Nguyễn Công Thành ([Mã SV])       |
-| **Thành viên 3**         | Lê Đỗ Gia Vũ ([Mã SV])            |
-| **Link Demo**            | [Dán link Vercel của bạn vào đây] |
+| Mục                      | Thông tin                        |
+| :----------------------- | :------------------------------- |
+| **Giảng viên hướng dẫn** | TS. Đào Thị Lệ Thủy              |
+| **Nhóm thực hiện**       |                                  |
+| **Thành viên 1**         | An Hoàng Anh (223332813)         |
+| **Thành viên 2**         | Nguyễn Công Thành (223332850)    |
+| **Thành viên 3**         | Lê Đỗ Gia Vũ (223332864)         |
+| **Link Demo**            | https://grocery4everybody.id.vn/ |
 
 ---
 
@@ -36,7 +36,7 @@
 
 ## 3. CÔNG NGHỆ SỬ DỤNG
 
-Dự án sử dụng các công nghệ mã nguồn mở mới nhất (Cutting-edge Tech Stack) để đảm bảo hiệu năng và tính mở rộng.
+Dự án sử dụng các công nghệ mã nguồn mở mới nhất để đảm bảo hiệu năng và tính mở rộng.
 
 ### 3.1. Frontend
 
@@ -67,7 +67,7 @@ Dự án sử dụng các công nghệ mã nguồn mở mới nhất (Cutting-ed
 ### Bước 1: Chuẩn bị môi trường
 
 - Cài đặt **Node.js** (Phiên bản 18 trở lên).
-- Tài khoản **Airtable** (đã setup các bảng: `products`, `categories`, `orders`...).
+- Tài khoản **Airtable** (đã setup các bảng: `products`, `categories`, `orders`,`orders-products`,`categories`).
 - Tài khoản **Resend** (để lấy API Key gửi mail).
 
 ### Bước 2: Clone mã nguồn
@@ -76,3 +76,62 @@ Dự án sử dụng các công nghệ mã nguồn mở mới nhất (Cutting-ed
 git clone [https://github.com/HoangAnhAn04/project-shopping-web.git](https://github.com/HoangAnhAn04/project-shopping-web.git)
 cd project-shopping-web
 ```
+
+### Bước 3: Cài đặt dependencies
+
+Chạy một trong các lệnh sau để cài đặt toàn bộ dependencies đã được khai báo trong file `package.json`:
+
+```sh
+npm install
+# hoặc
+yarn install
+# hoặc
+pnpm install
+
+```
+
+**Lưu ý:**
+
+- Không cần cài từng thư viện riêng lẻ, chỉ cần chạy `npm install` là đủ.
+- Nếu gặp lỗi thiếu package, kiểm tra lại file `package.json` hoặc chạy lại lệnh cài đặt.
+
+### Bước 4: Tạo file cấu hình môi trường
+
+Tạo file `.env.local` ở thư mục gốc với nội dung mẫu:
+
+```env
+AIRTABLE_API_KEY=pat_xxx
+AIRTABLE_BASE_ID=app_xxx
+AIRTABLE_ORDERS_TABLE_NAME=orders
+RESEND_API_KEY=re_xxx
+```
+
+> Thay các giá trị bằng thông tin thực tế của bạn (lấy từ Airtable và Resend).
+
+### Bước 5: Chạy chương trình ở chế độ phát triển
+
+```sh
+npm run dev
+```
+
+Truy cập [http://localhost:3000](http://localhost:3000) để xem website.
+
+### Bước 6: Build và chạy production (tùy chọn)
+
+```sh
+npm run build
+npm start
+```
+
+# 5. HUƠỚNG DẪN SỬ DỤNG
+
+1. Truy cập website (hoặc localhost nếu chạy local).
+2. Duyệt, tìm kiếm sản phẩm theo nhu cầu.
+3. Thêm sản phẩm vào giỏ hàng, kiểm tra lại giỏ hàng.
+4. Nhập thông tin đặt hàng, xác nhận đơn hàng.
+5. Kiểm tra email để nhận xác nhận đơn hàng và chi tiết mua hàng.
+
+# 6. LICENSE
+
+Dự án này được phát triển cho mục đích học tập, phi lợi nhuận và phi thương mại.
+Mọi đóng góp hoặc sử dụng lại vui lòng ghi rõ nguồn và tác giả.
