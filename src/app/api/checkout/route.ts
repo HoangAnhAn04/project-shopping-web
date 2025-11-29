@@ -18,7 +18,7 @@ import { OrderConfirmationEmail } from '@/emails/OrderConfirmation';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const base = new Airtable({ apiKey: process.env.NEXT_PUBLIC_AIRTABLE_ACCESS_TOKEN }).base(
+const base = new Airtable({ apiKey: process.env.AIRTABLE_ACCESS_TOKEN }).base(
   process.env.AIRTABLE_BASE_ID as string
 );
 
