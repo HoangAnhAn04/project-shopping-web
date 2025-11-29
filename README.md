@@ -22,7 +22,7 @@
 
 ### 2.1. Tổng quan
 
-Đây là dự án website thương mại điện tử (E-commerce) tập trung vào trải nghiệm mua sắm nhanh chóng và hiện đại. Dự án áp dụng mô hình **Headless CMS** với Airtable làm cơ sở dữ liệu và Next.js làm nền tảng Frontend/Backend.
+Đây là dự án website thương mại điện tử (E-commerce) tập trung vào trải nghiệm mua sắm nhanh chóng và hiện đại.
 
 ### 2.2. Tính năng chính
 
@@ -72,8 +72,10 @@ Dự án sử dụng các công nghệ mã nguồn mở mới nhất để đả
 
 ### Bước 2: Clone mã nguồn
 
+Mở terminal trong thư mục bạn muốn lưu trữ dự án, sau đó chạy lệnh:
+
 ```bash
-git clone [https://github.com/HoangAnhAn04/project-shopping-web.git](https://github.com/HoangAnhAn04/project-shopping-web.git)
+git clone https://github.com/HoangAnhAn04/project-shopping-web.git
 cd project-shopping-web
 ```
 
@@ -123,7 +125,7 @@ npm run build
 npm start
 ```
 
-# 5. HUƠỚNG DẪN SỬ DỤNG
+# 5. HƯỚNG DẪN SỬ DỤNG
 
 1. Truy cập website (hoặc localhost nếu chạy local).
 2. Duyệt, tìm kiếm sản phẩm theo nhu cầu.
