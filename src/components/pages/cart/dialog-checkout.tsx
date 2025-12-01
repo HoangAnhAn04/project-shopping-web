@@ -26,9 +26,20 @@ import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
 const checkoutFormSchema = z.object({
-  name: z.string().min(2, {
-    message: 'Ít nhất 2 ký tự',
-  }),
+  name: z
+    .string()
+    .min(2, {
+      message: 'Họ và tên phải có ít nhất 2 ký tự',
+    })
+    .max(50, {
+      message: 'Họ và tên không được vượt quá 50 ký tự',
+    })
+    .regex(
+      /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+$/,
+      {
+        message: 'Họ và tên chỉ được chứa chữ cái và khoảng trắng',
+      }
+    ),
   email: z.string().min(1, { message: 'Email là bắt buộc' }).email({
     message: 'Địa chỉ email không hợp lệ',
   }),
